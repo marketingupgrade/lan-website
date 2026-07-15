@@ -449,9 +449,18 @@ function stopSynthwave() {
   }
 }
 
+// ---------------------------------------------------------------- popup-budget
+// Na 2 popups is de grap klaar. Comedy is timing.
+let popupBudget = 2;
+function spendPopup() {
+  if (popupBudget <= 0) return false;
+  popupBudget--;
+  return true;
+}
+
 // ---------------------------------------------------------------- popup "advertentie"
 // De sluitknop ontwijkt je cursor twee keer. Daarna mag het. Genade bestaat.
-setTimeout(() => $("popup-ad").classList.remove("hidden"), 4000);
+setTimeout(() => { if (spendPopup()) $("popup-ad").classList.remove("hidden"); }, 4000);
 let closeDodges = 0;
 $("popup-close").addEventListener("mouseenter", () => {
   if (closeDodges < 2) {
@@ -502,12 +511,16 @@ $("cookie-right").addEventListener("click", () => {
 });
 
 // ---------------------------------------------------------------- "ben je er nog?" interrupt
-// Verschijnt periodiek. Beide knoppen betekenen hetzelfde. Zo hoort dat.
-function showStillHere() {
+// Verschijnt één keer (het popup-budget is heilig). Beide knoppen
+// betekenen hetzelfde. Zo hoort dat.
+const stillHereTimer = setInterval(() => {
+  if (!spendPopup()) {
+    clearInterval(stillHereTimer);
+    return;
+  }
   $("stillhere-modal").classList.remove("hidden");
   blip(200);
-}
-setInterval(showStillHere, 45000);
+}, 45000);
 ["stillhere-ja", "stillhere-ja2"].forEach((id) =>
   $(id).addEventListener("click", () => $("stillhere-modal").classList.add("hidden"))
 );
