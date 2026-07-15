@@ -40,7 +40,7 @@ $("countdown-date").textContent =
   }) +
   " om " +
   getLanDates().start.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" }) +
-  " (zoals ALTIJD, want de LAN is ALTIJD op 28 december) ☜";
+  " t/m 30 december (zoals ALTIJD, want de LAN is ALTIJD van 28 t/m 30 december) ☜";
 
 let lanTimeStarted = false;
 function itIsLanTime() {
