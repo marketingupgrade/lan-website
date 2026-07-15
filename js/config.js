@@ -22,8 +22,14 @@ function getLanDates() {
 }
 
 // Het jaar-op-jaar klassement. Scores in pizzapunten (uiteraard).
-// Voeg elk jaar op 29 december de nieuwe uitslag toe. Of niet. Zie maar.
-const LEADERBOARD = {
+// Nog leeg — vul na elke editie een jaar toe in dit formaat:
+//   2026: [
+//     { naam: "PizzaGandalf", score: 102, prestatie: "won alles, at alles, zei niks" },
+//   ],
+const LEADERBOARD = {};
+
+// Voorbeelddata van hoe het klassement eruit kan zien (niet in gebruik).
+const LEADERBOARD_VOORBEELD = {
   2022: [
     { naam: "xX_Kevin_Xx", score: 74, prestatie: "vergat zijn voeding (traditie sindsdien)" },
     { naam: "PizzaGandalf", score: 91, prestatie: "at de laatste pizzapunt zonder te vragen" },
@@ -64,6 +70,21 @@ const LEADERBOARD = {
     { naam: "De Boekhouder", score: 66, prestatie: "afgeschreven maar niet uitgeschakeld" },
   ],
 };
+
+// De kandidaat-spellen. Stemmen gebeurt op de site (via het Rad van
+// Bestuur), de uitslag is bindend behalve als iemand harder roept.
+const GAMES = [
+  "Heroes of the Storm (traditie)",
+  "Age of Empires II",
+  "Counter-Strike (de oude)",
+  "Unreal Tournament 2004",
+  "Trackmania",
+  "Worms Armageddon",
+  "StarCraft II",
+  "Rocket League",
+  "Jackbox (voor de moraal)",
+  "GeoGuessr (schreeuwen mag)",
+];
 
 // Foto's van vorige edities (assets/images/). Deze draaien mee in
 // zowel het fotorooster als DE MONTAGE. Lege lijst = absurde placeholders.

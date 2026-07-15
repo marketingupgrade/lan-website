@@ -649,6 +649,78 @@ $("signup-form").addEventListener("submit", (e) => {
 });
 
 // ================================================================
+// WELKE SPELLEN GAAN WE SPELEN? — stemmen via het Rad van Bestuur.
+// Je klikt STEM bij je favoriet, waarna het rad bepaalt wie de stem
+// ECHT krijgt. Opslag in localStorage: lokaal, bindend, betekenisloos.
+// ================================================================
+
+const GAME_VOTES_KEY = "lan-game-votes";
+let gameVotes = JSON.parse(localStorage.getItem(GAME_VOTES_KEY) || "{}");
+let radDraait = false;
+
+function renderGames() {
+  const totaal = Object.values(gameVotes).reduce((a, b) => a + b, 0);
+  const max = Math.max(1, ...Object.values(gameVotes));
+  $("games-list").innerHTML = GAMES.map((game, i) => {
+    const stemmen = gameVotes[game] || 0;
+    return `<div class="game-row" data-game-idx="${i}">
+      <span class="game-naam">${game}</span>
+      <span class="game-balk-wrap"><span class="game-balk" style="width:${(stemmen / max) * 100}%"></span></span>
+      <span class="game-stemmen">${stemmen ? toRomanBig(stemmen) + " stem(men)" : "nog niks"}</span>
+      <button class="btn-stem" data-game="${game}">STEM 🗳️</button>
+    </div>`;
+  }).join("");
+  $("games-list").querySelectorAll(".btn-stem").forEach((btn) =>
+    btn.addEventListener("click", () => radVanBestuur(btn.dataset.game))
+  );
+  if (totaal === 0) {
+    $("games-status").textContent = "er is nog niet gestemd. de democratie wacht. stem op iets.";
+  }
+}
+
+function radVanBestuur(gekozen) {
+  if (radDraait) return;
+  radDraait = true;
+  $("games-list").querySelectorAll(".btn-stem").forEach((b) => (b.disabled = true));
+  $("games-status").textContent = `🎡 je stemde op "${gekozen}". het RAD VAN BESTUUR beraadslaagt...`;
+
+  const rows = [...$("games-list").querySelectorAll(".game-row")];
+  const winnaarIdx = Math.floor(Math.random() * GAMES.length);
+  // het rad draait 2 volle rondes en landt dan op de "juiste" keuze
+  const stappen = GAMES.length * 2 + winnaarIdx + 1;
+  let stap = 0;
+
+  const tick = () => {
+    rows.forEach((r) => r.classList.remove("spinning"));
+    rows[stap % rows.length].classList.add("spinning");
+    blip(300 + (stap % rows.length) * 40);
+    stap++;
+    if (stap <= stappen) {
+      // het rad remt af, zoals elk bestuur
+      setTimeout(tick, 60 + (stap / stappen) * 220);
+      return;
+    }
+    const winnaar = GAMES[winnaarIdx];
+    rows.forEach((r) => r.classList.remove("spinning"));
+    rows[winnaarIdx].classList.add("landed");
+    gameVotes[winnaar] = (gameVotes[winnaar] || 0) + 1;
+    localStorage.setItem(GAME_VOTES_KEY, JSON.stringify(gameVotes));
+    $("games-status").textContent =
+      winnaar === gekozen
+        ? `✅ je stem ging naar "${winnaar}". precies wat je wilde. verdacht.`
+        : `🎡 je stemde op "${gekozen}", dus de stem ging naar "${winnaar}". zo werkt democratie hier.`;
+    airhorn();
+    setTimeout(() => {
+      radDraait = false;
+      renderGames();
+    }, 1600);
+  };
+  tick();
+}
+
+renderGames();
+
+// ================================================================
 // HET JAAR-OP-JAAR KLASSEMENT — alle data, nul leesbaarheid.
 // Jaar kiezen via een scrollende marquee (timing is een skill),
 // posities in binair, scores in foute romeinse cijfers, en de
@@ -659,12 +731,20 @@ $("signup-form").addEventListener("submit", (e) => {
 let lbYear = null;
 let lbOrder = "vibes";
 
-// De jaren-marquee, aangevuld met jaren waarin er niks te kiezen valt.
-const YEAR_MARQUEE_ITEMS = [
-  ["1987", "dood"], ["2020", "dood"], ["2022", "echt"], ["1994", "dood"],
-  ["2023", "echt"], ["geen idee", "dood"], ["2024", "echt"],
-  ["2019½", "dood"], ["2025", "echt"], ["volgend jaar", "dood"],
-];
+// De jaren-marquee: echte jaren komen uit LEADERBOARD, de rest is
+// opvulling waarin er niks te kiezen valt.
+function yearMarqueeItems() {
+  const dood = ["1987", "2020", "1994", "geen idee", "2019½", "volgend jaar"];
+  const echt = Object.keys(LEADERBOARD).sort();
+  const items = [];
+  const max = Math.max(dood.length, echt.length);
+  for (let i = 0; i < max; i++) {
+    if (dood[i]) items.push([dood[i], "dood"]);
+    if (echt[i]) items.push([echt[i], "echt"]);
+  }
+  return items;
+}
+const YEAR_MARQUEE_ITEMS = yearMarqueeItems();
 
 function initYearMarquee() {
   $("year-marquee").innerHTML = YEAR_MARQUEE_ITEMS
@@ -718,6 +798,23 @@ function lbSortRows(rows) {
 
 function renderLeaderboard() {
   const table = $("lb-table");
+  // Leeg klassement: dan wordt dit een wervingscampagne.
+  if (!Object.keys(LEADERBOARD).length) {
+    table.innerHTML = `<tr><td style="font-size:18px;padding:24px;text-align:center;">
+      het klassement is nog <b>HELEMAAL LEEG</b>. 😱<br>
+      geen legendes. geen pizzapunten. geen geschiedenis.<br><br>
+      <b>dit kan jouw naam zijn.</b> in 8px, of in goud. dat bepaalt je score.<br><br>
+      <button class="btn" id="lb-nudge">👉 ZET JE NAAM IN DE GESCHIEDENIS (aanmelden) 👈</button>
+    </td></tr>`;
+    $("lb-nudge").addEventListener("click", () => {
+      document.querySelector(".box-signup").scrollIntoView({ behavior: "smooth" });
+      if (typeof gsap !== "undefined") {
+        gsap.fromTo(".box-signup", { scale: 0.95 }, { scale: 1, rotation: 2, duration: 0.6, ease: "elastic.out(1.2,0.3)", delay: 0.8 });
+      }
+      blip(900);
+    });
+    return;
+  }
   if (!lbYear || !LEADERBOARD[lbYear]) {
     table.innerHTML = `<tr><td style="font-size:18px;padding:20px;">hier komt het klassement zodra je een jaar hebt geklikt. in de marquee. terwijl hij beweegt. ja echt.</td></tr>`;
     return;

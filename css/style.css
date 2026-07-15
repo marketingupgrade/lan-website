@@ -410,6 +410,53 @@ body {
   border-left: 8px solid #ffff00;
 }
 
+/* ------------- welke spellen? (rad van bestuur) ------------- */
+.box-games { background: #2b0a00; transform: rotate(0.5deg); }
+.games-intro { color: #00ffff; font-size: 15px; }
+.games-list { text-align: left; }
+.game-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  margin: 4px 0;
+  background: rgba(0,0,0,0.5);
+  border: 2px dashed #ff9900;
+}
+.game-row.spinning {
+  background: #4b0082;
+  border-color: #00ffff;
+  box-shadow: 0 0 14px #ff00ff;
+}
+.game-row.landed {
+  background: #003300;
+  border-color: #00ff00;
+  box-shadow: 0 0 18px #00ff00;
+}
+.game-naam { flex: 1; color: #00ff00; font-size: 15px; }
+.game-balk-wrap {
+  flex: 1;
+  height: 16px;
+  background: #000;
+  border: 2px inset #666;
+}
+.game-balk {
+  height: 100%;
+  background: repeating-linear-gradient(45deg, #ff00ff, #ff00ff 8px, #ffff00 8px, #ffff00 16px);
+  transition: width 0.6s;
+}
+.game-stemmen { min-width: 90px; color: #ffff00; font-size: 12px; text-align: right; }
+.btn-stem {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border: 3px outset #c0c0c0;
+  background: linear-gradient(#ffff00, #999900);
+  cursor: pointer;
+}
+.btn-stem:disabled { filter: grayscale(1); cursor: wait; }
+
 /* ------------- het klassement (jaar-op-jaar, leed-op-leed) ------------- */
 .box-leaderboard { background: #002222; transform: rotate(-0.7deg); }
 
