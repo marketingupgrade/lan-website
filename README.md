@@ -26,6 +26,10 @@ Features:
 - 🍪 Cookie banner met dubbele ontkenningen (verkeerde knop = banner op z'n kop)
 - 🚨 Popup-advertentie waarvan de sluitknop je cursor ontwijkt (2x, daarna genade)
 - ↑↑↓↓←→←→BA Konami code
+- 🎬 GSAP-misère (`js/gsap-misery.js`, GSAP lokaal gevendored in `js/vendor/`):
+  per-letter zwevende titel, elastisch dreunende seconden, ademende foto's,
+  secties die al draaiend binnenvallen, een vluchtende toeterknop en de
+  Gremlin — elke 15 seconden doet een willekeurig element een rondje.
 
 ## Instellen
 
