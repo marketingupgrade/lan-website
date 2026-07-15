@@ -31,6 +31,29 @@
       </td>
     </tr>
 
+    <!-- HET HOOFDPODIUM: countdown en foto's, want daar gaat het om -->
+    <tr>
+      <td class="cell-stage" colspan="2">
+        <div class="content-box box-countdown">
+          <h2 class="section-title rainbow-text">⏰ NOG PRECIES DIT LANG: ⏰</h2>
+          <div class="countdown" id="countdown">
+            <div class="time-block"><span class="time-value" id="cd-days">--</span><br><span class="time-label">dagen</span></div>
+            <div class="time-block"><span class="time-value" id="cd-hours">--</span><br><span class="time-label">uren</span></div>
+            <div class="time-block"><span class="time-value" id="cd-mins">--</span><br><span class="time-label">minuutjes</span></div>
+            <div class="time-block"><span class="time-value" id="cd-secs">--</span><br><span class="time-label">sec.</span></div>
+          </div>
+          <div class="countdown-date blink" id="countdown-date"></div>
+        </div>
+
+        <div class="content-box box-photos">
+          <h2 class="section-title rainbow-text">📸 BEWIJSMATERIAAL VAN VORIGE EDITIES 📸</h2>
+          <button class="btn btn-montage" id="btn-montage">🌴 START DE MONTAGE 🌴<br><small>(80's. neon. geen spijt.)</small></button>
+          <div class="photo-grid" id="photo-grid"></div>
+          <div class="fine-print">klik op een foto om de montage daar te starten. draai je volume alvast omhoog. of juist niet.</div>
+        </div>
+      </td>
+    </tr>
+
     <tr>
       <!-- LINKER KOLOM: NAVIGATIE DIE NERGENS HEEN GAAT -->
       <td class="cell-nav" width="22%" valign="top">
@@ -59,18 +82,6 @@
 
       <!-- RECHTER KOLOM: DE INHOUD -->
       <td class="cell-main" valign="top">
-
-        <!-- DE COUNTDOWN -->
-        <div class="content-box box-countdown">
-          <h2 class="section-title rainbow-text">⏰ NOG PRECIES DIT LANG: ⏰</h2>
-          <div class="countdown" id="countdown">
-            <div class="time-block"><span class="time-value" id="cd-days">--</span><br><span class="time-label">dagen</span></div>
-            <div class="time-block"><span class="time-value" id="cd-hours">--</span><br><span class="time-label">uren</span></div>
-            <div class="time-block"><span class="time-value" id="cd-mins">--</span><br><span class="time-label">minuutjes</span></div>
-            <div class="time-block"><span class="time-value" id="cd-secs">--</span><br><span class="time-label">sec.</span></div>
-          </div>
-          <div class="countdown-date blink" id="countdown-date"></div>
-        </div>
 
         <!-- MARQUEE #2 -->
         <marquee behavior="alternate" scrollamount="20" class="marquee-mid" id="ticker">⬅️ deze tekst stuitert omdat het kan ➡️</marquee>
@@ -101,14 +112,6 @@
           <h2 class="section-title">🧙‍♂️ LAN WIJSHEID VAN DE DAG 🧙‍♂️</h2>
           <div class="wisdom" id="wisdom">"Wie zijn kabel vergeet, is gedoemd tot wifi."</div>
           <button class="btn btn-small" id="btn-wisdom">nog 1 wijsheid a.u.b. 🔮</button>
-        </div>
-
-        <!-- FOTO'S -->
-        <div class="content-box box-photos">
-          <h2 class="section-title rainbow-text">📸 BEWIJSMATERIAAL VAN VORIGE EDITIES 📸</h2>
-          <button class="btn btn-montage" id="btn-montage">🌴 START DE MONTAGE 🌴<br><small>(80's. neon. geen spijt.)</small></button>
-          <div class="photo-grid" id="photo-grid"></div>
-          <div class="fine-print">klik op een foto om de montage daar te starten. draai je volume alvast omhoog. of juist niet.</div>
         </div>
 
         <!-- AANMELDEN (veel succes) -->
@@ -189,6 +192,43 @@
       <p>Je hebt gewonnen: <b>1 (één) plek op de LAN</b></p>
       <p class="fine-print">die je al had</p>
       <button class="btn btn-small" id="popup-claim">CLAIM PRIJS</button>
+    </div>
+  </div>
+
+  <!-- DE MUZIEK WERKBANK™ — altijd aanwezig, nooit gevraagd -->
+  <div id="music-toolbox" class="music-toolbox">
+    <div class="mt-titlebar">
+      <span class="mt-title">🧰 MUZIEK WERKBANK™ v0.98 (shareware)</span>
+      <span class="mt-buttons">
+        <button id="mt-minimize" title="minimaliseren">▁</button>
+        <button id="mt-close" title="sluiten">✕</button>
+      </span>
+    </div>
+    <div class="mt-body">
+      <div class="mt-alarm blink" id="mt-alarm">⚠️ MUZIEK STAAT NOG UIT — DRUK OP PLAY, HET IS VERPLICHT ⚠️</div>
+      <iframe id="mt-spotify" title="De Officiële LAN Playlist"
+        src="https://open.spotify.com/embed/playlist/0QyIUoEISy1s9Zw0t02F5Y?utm_source=generator&theme=0"
+        width="100%" height="152" frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+      <div class="mt-controls">
+        <div class="mt-knob-wrap">
+          <div class="mt-knob" id="mt-knob"><div class="mt-knob-dot"></div></div>
+          <label>VOLUME<br><small>(van je verwachtingen)</small></label>
+        </div>
+        <div class="mt-eq" id="mt-eq">
+          <input type="range" min="0" max="10" value="5" orient="vertical">
+          <input type="range" min="0" max="10" value="7" orient="vertical">
+          <input type="range" min="0" max="10" value="3" orient="vertical">
+          <input type="range" min="0" max="10" value="9" orient="vertical">
+          <input type="range" min="0" max="10" value="1" orient="vertical">
+        </div>
+        <div class="mt-shuffle-wrap">
+          <button class="mt-shuffle on" id="mt-shuffle">🔀 SHUFFLE<br>ALTIJD AAN</button>
+          <button class="mt-stop" id="mt-stop">⏹ STOP MUZIEK</button>
+        </div>
+      </div>
+      <marquee scrollamount="4" class="mt-marquee">NOW PLAYING: geen idee, spotify vertelt ons niks ✦ shuffle staat aan (wettelijk verplicht) ✦ de EQ doet niks maar staat wel lekker druk ✦</marquee>
     </div>
   </div>
 

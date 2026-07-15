@@ -635,6 +635,85 @@ $("signup-form").addEventListener("submit", (e) => {
   }, 350);
 });
 
+// ================================================================
+// DE MUZIEK WERKBANK™ — altijd aanwezig, nooit gevraagd.
+// De playlist speelt via de Spotify embed; alles eromheen is
+// nep, kapot, of allebei. Sluiten is niet mogelijk. Muziek is verplicht.
+// ================================================================
+
+// De alarm-balk: wij kunnen niet zien of je écht op play hebt gedrukt
+// (Spotify vertelt ons niks), dus we werken op basis van vertrouwen.
+$("mt-alarm").addEventListener("click", () => {
+  $("mt-alarm").classList.remove("blink");
+  $("mt-alarm").style.background = "#003300";
+  $("mt-alarm").style.color = "#00ff00";
+  $("mt-alarm").textContent = "✅ goed zo. we vertrouwen je. (shuffle aanzetten doe je zelf even in spotify)";
+});
+
+// De volumeknop draait prachtig en regelt helemaal niets.
+let knobAngle = 0;
+$("mt-knob").addEventListener("click", () => {
+  knobAngle += 45 + Math.random() * 270;
+  $("mt-knob").style.transform = `rotate(${knobAngle}deg)`;
+  blip(200 + (knobAngle % 800));
+});
+
+// De EQ: elke schuif die je aanraakt springt naar een eigen mening.
+$("mt-eq").querySelectorAll("input").forEach((slider) => {
+  slider.addEventListener("change", () => {
+    setTimeout(() => {
+      slider.value = Math.floor(Math.random() * 11);
+      blip(400);
+    }, 300);
+  });
+});
+
+// Shuffle staat aan. Shuffle blijft aan. Niet aankomen.
+const SHUFFLE_EXCUSES = [
+  "🔀 SHUFFLE\nBLIJFT AAN",
+  "🔀 NEE.",
+  "🔀 SHUFFLE IS\nEEN LEVENSSTIJL",
+  "🔀 ARTIKEL 12:\nSHUFFLE STAAT AAN",
+];
+let shuffleClicks = 0;
+$("mt-shuffle").addEventListener("click", () => {
+  const btn = $("mt-shuffle");
+  btn.classList.remove("wiggle");
+  void btn.offsetWidth;
+  btn.classList.add("wiggle");
+  btn.innerText = SHUFFLE_EXCUSES[Math.min(shuffleClicks++, SHUFFLE_EXCUSES.length - 1)];
+  blip(120);
+});
+
+// De stopknop kent alleen weigeringen.
+const STOP_REFUSALS = ["⏹ nee", "⏹ nee.", "⏹ NEE", "⏹ de muziek stopt als de LAN stopt", "⏹ dus nooit"];
+let stopClicks = 0;
+$("mt-stop").addEventListener("click", () => {
+  $("mt-stop").textContent = STOP_REFUSALS[Math.min(stopClicks++, STOP_REFUSALS.length - 1)];
+  airhorn();
+});
+
+// Minimaliseren maakt hem eerst GROTER. Daarna pas gewoon klein. Les geleerd.
+let minimizeAttempts = 0;
+$("mt-minimize").addEventListener("click", () => {
+  const box = $("music-toolbox");
+  if (minimizeAttempts++ === 0) {
+    box.classList.add("enlarged");
+    blip(90);
+    return;
+  }
+  box.classList.remove("enlarged");
+  box.classList.toggle("minimized");
+});
+
+// Sluiten kan niet. De werkbank verplaatst zich alleen naar de andere hoek.
+$("mt-close").addEventListener("click", () => {
+  const box = $("music-toolbox");
+  box.style.right = box.style.right === "auto" ? "12px" : "auto";
+  box.style.left = box.style.right === "auto" ? "12px" : "auto";
+  blip(60);
+});
+
 // ---------------------------------------------------------------- konami code
 const KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
 let konamiPos = 0;
