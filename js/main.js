@@ -636,6 +636,141 @@ $("signup-form").addEventListener("submit", (e) => {
 });
 
 // ================================================================
+// HET JAAR-OP-JAAR KLASSEMENT — alle data, nul leesbaarheid.
+// Jaar kiezen via een scrollende marquee (timing is een skill),
+// posities in binair, scores in foute romeinse cijfers, en de
+// standaardsortering is "vibes". YoY-groei wel gewoon correct
+// berekend, want ergens moeten we een grens trekken.
+// ================================================================
+
+let lbYear = null;
+let lbOrder = "vibes";
+
+// De jaren-marquee, aangevuld met jaren waarin er niks te kiezen valt.
+const YEAR_MARQUEE_ITEMS = [
+  ["1987", "dood"], ["2020", "dood"], ["2022", "echt"], ["1994", "dood"],
+  ["2023", "echt"], ["geen idee", "dood"], ["2024", "echt"],
+  ["2019½", "dood"], ["2025", "echt"], ["volgend jaar", "dood"],
+];
+
+function initYearMarquee() {
+  $("year-marquee").innerHTML = YEAR_MARQUEE_ITEMS
+    .map(([label, soort]) =>
+      soort === "echt"
+        ? `<span data-year="${label}">${label}</span>`
+        : `<span class="dead-year">${label}</span>`
+    ).join("");
+  $("year-marquee").querySelectorAll("span[data-year]").forEach((el) =>
+    el.addEventListener("click", () => {
+      lbYear = el.dataset.year;
+      $("year-selected").textContent = `geselecteerd: ${lbYear} 🎯 (mooi geklikt)`;
+      $("year-selected").classList.remove("blink");
+      renderLeaderboard();
+      blip(700);
+    })
+  );
+  $("year-marquee").querySelectorAll(".dead-year").forEach((el) =>
+    el.addEventListener("click", () => {
+      $("lb-status").textContent = `❌ "${el.textContent}" is geen kiesbaar jaar. probeer een echt jaar. tijdens het scrollen. sorry.`;
+      blip(90);
+    })
+  );
+}
+
+// Romeins tot ~400, met dezelfde twijfelachtige tabel-filosofie.
+function toRomanBig(n) {
+  if (n <= 0) return "N";
+  const table = [[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+  let out = "";
+  for (const [v, s] of table) while (n >= v) { out += s; n -= v; }
+  return out;
+}
+
+function lbYoY(naam, jaar, score) {
+  const vorig = LEADERBOARD[String(Number(jaar) - 1)];
+  if (!vorig) return "—";
+  const prev = vorig.find((r) => r.naam === naam);
+  if (!prev) return "NIEUW (verdacht)";
+  const delta = score - prev.score;
+  if (delta === 0) return "→ stabiel (saai)";
+  return delta > 0 ? `↑ +${toRomanBig(delta)}` : `↓ -${toRomanBig(-delta)} (au)`;
+}
+
+function lbSortRows(rows) {
+  const sorted = [...rows];
+  if (lbOrder === "vibes") sorted.sort(() => Math.random() - 0.5);
+  if (lbOrder === "alpha2") sorted.sort((a, b) => (a.naam[1] || "").localeCompare(b.naam[1] || ""));
+  return sorted;
+}
+
+function renderLeaderboard() {
+  const table = $("lb-table");
+  if (!lbYear || !LEADERBOARD[lbYear]) {
+    table.innerHTML = `<tr><td style="font-size:18px;padding:20px;">hier komt het klassement zodra je een jaar hebt geklikt. in de marquee. terwijl hij beweegt. ja echt.</td></tr>`;
+    return;
+  }
+  const rows = lbSortRows(LEADERBOARD[lbYear]);
+  const maxScore = Math.max(...LEADERBOARD[lbYear].map((r) => r.score));
+  const minScore = Math.min(...LEADERBOARD[lbYear].map((r) => r.score));
+  // positie = plek in de ECHTE ranglijst, getoond in binair. logisch.
+  const ranked = [...LEADERBOARD[lbYear]].sort((a, b) => b.score - a.score);
+
+  table.innerHTML =
+    `<tr><th>POS (binair)</th><th>GAMER</th><th>PIZZAPUNTEN (romeins)</th><th>YoY</th><th>PRESTATIE</th></tr>` +
+    rows.map((r) => {
+      const pos = ranked.findIndex((x) => x.naam === r.naam) + 1;
+      const rowClass = r.score === maxScore ? "lb-winnaar" : r.score === minScore ? "lb-laatste" : "";
+      const kroon = r.score === minScore ? " 🏆" : r.score === maxScore ? " (winnaar ofzo)" : "";
+      return `<tr class="${rowClass}">
+        <td>${pos.toString(2).padStart(4, "0")}</td>
+        <td>${r.naam}${kroon}</td>
+        <td>${toRomanBig(r.score)}</td>
+        <td>${lbYoY(r.naam, lbYear, r.score)}</td>
+        <td class="lb-prestatie" title="${r.prestatie}">${r.prestatie}</td>
+      </tr>`;
+    }).join("");
+
+  if (typeof gsap !== "undefined") {
+    gsap.from("#lb-table tr", {
+      x: () => gsap.utils.random(-200, 200),
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.06,
+      ease: "back.out(1.8)",
+    });
+  }
+}
+
+$("lb-sort-vibes").addEventListener("click", () => {
+  lbOrder = "vibes";
+  $("lb-status").textContent = "⏳ vibes worden gemeten...";
+  setTimeout(() => {
+    $("lb-status").textContent = "✨ gesorteerd op vibes (elke keer anders, zo werken vibes)";
+    renderLeaderboard();
+  }, 1200);
+});
+$("lb-sort-alpha").addEventListener("click", () => {
+  lbOrder = "alpha2";
+  $("lb-status").textContent = "🔤 gesorteerd op de tweede letter. de eerste letter is een cliché.";
+  renderLeaderboard();
+});
+$("lb-sort-score").addEventListener("click", () => {
+  $("lb-status").textContent = "🔒 sorteren op score is een PREMIUM-functie. upgrade naar LAN PRO voor €0,00... betaling mislukt. probeer het volgend jaar.";
+  airhorn();
+});
+
+// LIVE herberekening: elke 30 seconden husselt het klassement zichzelf.
+setInterval(() => {
+  if (lbYear && lbOrder === "vibes") {
+    $("lb-status").textContent = "⚡ LIVE herberekening... (de vibes zijn verschoven)";
+    renderLeaderboard();
+  }
+}, 30000);
+
+initYearMarquee();
+renderLeaderboard();
+
+// ================================================================
 // DE MUZIEK WERKBANK™ — altijd aanwezig, nooit gevraagd.
 // De playlist speelt via de Spotify embed; alles eromheen is
 // nep, kapot, of allebei. Sluiten is niet mogelijk. Muziek is verplicht.

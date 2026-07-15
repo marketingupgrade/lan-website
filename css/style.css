@@ -410,6 +410,73 @@ body {
   border-left: 8px solid #ffff00;
 }
 
+/* ------------- het klassement (jaar-op-jaar, leed-op-leed) ------------- */
+.box-leaderboard { background: #002222; transform: rotate(-0.7deg); }
+
+.year-instructie { color: #00ffff; font-size: 14px; margin-bottom: 6px; }
+.year-marquee {
+  background: #000;
+  border: 3px dashed #ff00ff;
+  padding: 8px 0;
+  font-size: 22px;
+}
+.year-marquee span {
+  margin: 0 22px;
+  color: #ffff00;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.year-marquee span:hover { color: #ff00ff; background: #003300; }
+.year-marquee .dead-year { color: #666; text-decoration: line-through; }
+.year-selected { color: #00ff00; font-size: 16px; margin: 6px 0 10px; }
+
+.lb-status { min-height: 22px; color: #ff9900; font-size: 15px; margin-bottom: 6px; }
+
+/* de tabel is expres 130% breed. horizontaal scrollen bouwt karakter. */
+.lb-table-wrap { overflow-x: auto; border: 3px inset #808080; }
+.lb-table {
+  width: 130%;
+  border-collapse: separate;
+  border-spacing: 3px;
+  background: #000;
+  font-size: 15px;
+}
+.lb-table th {
+  background: #ff00ff;
+  color: #ffff00;
+  padding: 6px;
+  border: 3px outset #00ff00;
+  text-decoration: underline wavy;
+  font-size: 14px;
+}
+.lb-table td {
+  padding: 5px 8px;
+  border: 2px dashed;
+  color: #00ff00;
+}
+.lb-table tr:nth-child(odd) td { background: #1a0033; border-color: #00ffff; }
+.lb-table tr:nth-child(even) td { background: #002b00; border-color: #ff00ff; }
+.lb-table tr:nth-child(3n) td { transform: rotate(0.6deg); }
+.lb-table tr:nth-child(3n+1) td { transform: rotate(-0.5deg); }
+
+/* de prestatie-kolom is te smal. hover maar. */
+.lb-table td.lb-prestatie {
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+}
+
+/* de winnaar staat expres piepklein; de laatste krijgt het podium */
+.lb-table tr.lb-winnaar td { font-size: 8px; color: #999; }
+.lb-table tr.lb-laatste td {
+  font-size: 24px;
+  color: #ffd700;
+  background: #4b0082;
+  text-shadow: 0 0 8px #ffd700;
+}
+
 /* ------------- aanmeldformulier (veel succes) ------------- */
 #signup-form { text-align: left; }
 .form-row { margin: 16px 0; }

@@ -23,6 +23,12 @@ Features:
   zonsondergang, neon gridvloer, VHS-ruis met ▶ PLAY en 1987-timestamp,
   Ken Burns crossfades én een live gesynthetiseerde synthwave-soundtrack
   (WebAudio: kick, snare, hihat, sawtooth-bas, pads — geen mp3 te bekennen).
+- 🏆 Jaar-op-jaar klassement (data in `js/config.js` → `LEADERBOARD`): jaar
+  kiezen door op een **scrollende marquee** te klikken, posities in binair,
+  scores in foute Romeinse cijfers, standaardsortering "vibes" (elke 30s
+  live herberekend), sorteren op score is een premium-functie (betaling
+  mislukt altijd), de winnaar staat in 8px en de laatste plaats krijgt goud.
+  De YoY-groei klopt wel gewoon — ergens moet een grens.
 - 🍪 Cookie banner met dubbele ontkenningen (verkeerde knop = banner op z'n kop)
 - 🚨 Popup-advertentie waarvan de sluitknop je cursor ontwijkt (2x, daarna genade)
 - ↑↑↓↓←→←→BA Konami code
