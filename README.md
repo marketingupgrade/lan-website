@@ -25,10 +25,15 @@ Features:
 
 ## Instellen
 
+De LAN start **altijd op 28 december** — de site telt automatisch af naar de
+eerstvolgende editie, elk jaar opnieuw, voor eeuwig. Tijdens de LAN zelf
+(standaard 3 dagen) staat de site in "JA!!!"-modus.
+
 Alles staat in **`js/config.js`**:
 
 ```js
-const LAN_DATE = new Date(2026, 8, 19, 18, 0); // let op: maand is 0-gebaseerd!
+const LAN_START_HOUR = 18;      // starttijd op 28 december
+const LAN_DURATION_DAYS = 3;    // hoe lang het JA!!!-feest duurt
 const PHOTOS = [ "assets/images/mijn-foto.jpg", ... ];
 ```
 

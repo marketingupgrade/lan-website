@@ -14,7 +14,8 @@ const MS_PER_DAY = 86400000;
 
 function updateCountdown() {
   const now = new Date();
-  const diff = LAN_DATE - now;
+  const { start } = getLanDates();
+  const diff = start - now;
 
   if (diff <= 0) {
     itIsLanTime();
@@ -34,12 +35,12 @@ function updateCountdown() {
 
 $("countdown-date").textContent =
   "☞ de grote dag: " +
-  LAN_DATE.toLocaleDateString("nl-NL", {
+  getLanDates().start.toLocaleDateString("nl-NL", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   }) +
   " om " +
-  LAN_DATE.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" }) +
-  " ☜";
+  getLanDates().start.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" }) +
+  " (zoals ALTIJD, want de LAN is ALTIJD op 28 december) ☜";
 
 let lanTimeStarted = false;
 function itIsLanTime() {
@@ -62,7 +63,7 @@ setInterval(updateCountdown, 1000);
 // ---------------------------------------------------------------- statistieken
 // Wetenschappelijk verantwoord: elke berekening slaat nergens op.
 function renderStats() {
-  const diff = Math.max(0, LAN_DATE - new Date());
+  const diff = Math.max(0, getLanDates().start - new Date());
   const days = diff / MS_PER_DAY;
 
   const stats = [
@@ -72,6 +73,7 @@ function renderStats() {
     { label: "keer dat iemand 'werkt de switch al?' gaat vragen", value: Math.floor(days * 0.8) + 12 },
     { label: "meter netwerkkabel die niemand gaat opruimen", value: Math.floor(days * 4.2) },
     { label: "procent kans dat iemand z'n voeding vergeet", value: 100 },
+    { label: "overgebleven kerstkransjes die als LAN-brandstof dienen", value: Math.floor(days * 1.5) + 40 },
   ];
 
   $("stats-grid").innerHTML = stats
