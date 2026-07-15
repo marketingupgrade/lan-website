@@ -19,6 +19,10 @@ Features:
   pizza in Romeinse cijfers op een omgekeerde slider, dubbele-ontkenning-checkbox
   die zichzelf uitvinkt, knoppen die van plaats wisselen, en een voortgangsbalk
   die op 99% terugvalt naar 12%.
+- 🌴 **DE MONTAGE**: een volledige Miami Vice 80's foto-montage — synthwave
+  zonsondergang, neon gridvloer, VHS-ruis met ▶ PLAY en 1987-timestamp,
+  Ken Burns crossfades én een live gesynthetiseerde synthwave-soundtrack
+  (WebAudio: kick, snare, hihat, sawtooth-bas, pads — geen mp3 te bekennen).
 - 🍪 Cookie banner met dubbele ontkenningen (verkeerde knop = banner op z'n kop)
 - 🚨 Popup-advertentie waarvan de sluitknop je cursor ontwijkt (2x, daarna genade)
 - ↑↑↓↓←→←→BA Konami code

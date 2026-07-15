@@ -23,9 +23,31 @@ function getLanDates() {
   return { start, end };
 }
 
-// Foto's van vorige edities. Zet de bestanden in assets/images/
-// en voeg ze hier toe. Lege lijst = absurde placeholders.
+// Foto's van vorige edities (assets/images/). Deze draaien mee in
+// zowel het fotorooster als DE MONTAGE. Lege lijst = absurde placeholders.
 const PHOTOS = [
-  // "assets/images/lan-2024-pizza-incident.jpg",
-  // "assets/images/lan-2025-kabelspaghetti.jpg",
+  "assets/images/0cc64601.jpg",
+  "assets/images/256cf3e2.jpg",
+  "assets/images/30478f4a.jpg",
+  "assets/images/3536576e.jpg",
+  "assets/images/38241607.jpg",
+  "assets/images/56f35da9.jpg",
+  "assets/images/57aedc03.jpg",
+  "assets/images/62c553d8.jpg",
+  "assets/images/6440ace8.jpg",
+  "assets/images/6a73ac68.jpg",
+  "assets/images/6e7179dc.jpg",
+  "assets/images/6eb85723.jpg",
+  "assets/images/8249affc.jpg",
+  "assets/images/872e775e.jpg",
+  "assets/images/89d06602.jpg",
+  "assets/images/8cc69f9f.jpg",
+  "assets/images/a0e253d9.jpg",
+  "assets/images/aaeaa9be.jpg",
+  "assets/images/ac9d1866.jpg",
+  "assets/images/c74e21e3.jpg",
+  "assets/images/e8e6f205.jpg",
+  "assets/images/ef5e697b.jpg",
+  "assets/images/f0a03f7c.jpg",
+  "assets/images/fbd15b45.jpg",
 ];

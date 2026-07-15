@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>~*~*~ IS HET AL TIJD VOOR DE LAN??? ~*~*~ (OFFICIELE WEBSITE) (ECHT)</title>
   <meta name="description" content="De sleghtste maar meest EPISCHE LAN countdown website van de Benelux en omstreken!!1!">
+  <meta property="og:image" content="assets/images/card.jpg">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖥️</text></svg>">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -105,7 +106,9 @@
         <!-- FOTO'S -->
         <div class="content-box box-photos">
           <h2 class="section-title rainbow-text">📸 BEWIJSMATERIAAL VAN VORIGE EDITIES 📸</h2>
+          <button class="btn btn-montage" id="btn-montage">🌴 START DE MONTAGE 🌴<br><small>(80's. neon. geen spijt.)</small></button>
           <div class="photo-grid" id="photo-grid"></div>
+          <div class="fine-print">klik op een foto om de montage daar te starten. draai je volume alvast omhoog. of juist niet.</div>
         </div>
 
         <!-- AANMELDEN (veel succes) -->
@@ -215,6 +218,26 @@
   <div id="lan-time-overlay" class="lan-time-overlay hidden">
     <div class="ja-text">JA!!!</div>
     <div class="ja-sub">HET IS TIJD. START DE MACHINES. 🖥️🖥️🖥️</div>
+  </div>
+
+  <!-- DE MONTAGE: miami vice, maar dan in een kelder in nederland -->
+  <div id="montage" class="montage hidden">
+    <div class="montage-sun" aria-hidden="true"></div>
+    <div class="montage-grid-floor" aria-hidden="true"></div>
+    <div class="montage-palms" aria-hidden="true"><span>🌴</span><span>🌴</span></div>
+    <div class="montage-title">LAN&nbsp;VICE</div>
+    <div class="montage-frame">
+      <img id="montage-img-a" class="montage-img" alt="LAN montage foto">
+      <img id="montage-img-b" class="montage-img" alt="LAN montage foto">
+    </div>
+    <div class="montage-caption" id="montage-caption"></div>
+    <div class="vhs-osd">
+      <span class="vhs-play blink">▶ PLAY</span>
+      <span class="vhs-rec"><span class="rec-dot">●</span> REC</span>
+    </div>
+    <div class="vhs-timestamp" id="vhs-timestamp">28.12.1987 23:59</div>
+    <div class="montage-scanlines" aria-hidden="true"></div>
+    <button class="montage-close" id="montage-close">EJECT ⏏</button>
   </div>
 
   <script src="js/config.js"></script>

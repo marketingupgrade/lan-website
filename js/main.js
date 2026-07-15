@@ -218,8 +218,12 @@ function renderPhotos() {
   const grid = $("photo-grid");
   if (typeof PHOTOS !== "undefined" && PHOTOS.length > 0) {
     grid.innerHTML = PHOTOS.map(
-      (src) => `<img src="${src}" alt="Bewijsmateriaal van een vorige LAN" loading="lazy">`
+      (src, i) =>
+        `<img src="${src}" alt="Bewijsmateriaal van een vorige LAN" loading="lazy" data-idx="${i}" title="klik voor DE MONTAGE">`
     ).join("");
+    grid.querySelectorAll("img").forEach((img) =>
+      img.addEventListener("click", () => startMontage(parseInt(img.dataset.idx, 10)))
+    );
     return;
   }
   const placeholders = [
@@ -235,6 +239,215 @@ function renderPhotos() {
     .join("");
 }
 renderPhotos();
+
+// ================================================================
+// DE MONTAGE — Miami Vice, maar dan een kelder in Nederland.
+// Crossfades, Ken Burns, VHS-timestamp en een volledig
+// gesynthetiseerde synthwave-soundtrack. Geen mp3's. Alleen wiskunde.
+// ================================================================
+
+const MONTAGE_CAPTIONS = [
+  "DE MANNEN. DE MACHINES. DE MELKZUUR.",
+  "ZE KWAMEN VOOR DE GAMES. ZE BLEVEN VOOR DE KABELS.",
+  "RENDEZ-VOUS OM MIDDERNACHT. EN OM 03:00. EN OM 05:30.",
+  "GEEN GENADE. WEL BITTERBALLEN.",
+  "ÉÉN HUIS. ZES HELDEN. NUL SLAAP.",
+  "DE PING WAS LAAG. DE INZET WAS HOOG.",
+  "SOMMIGE LEGENDES DRAGEN CAPES. DEZE DRAGEN KOPTELEFOONS.",
+  "28 DECEMBER. ELK JAAR. VOOR ALTIJD.",
+  "ER WERD GELACHEN. ER WERD VERLOREN. ER WERD GERAGEQUIT.",
+  "DE KOELKAST HEEFT ALLES GEZIEN.",
+  "BROEDERS IN DE STRIJD. VIJANDEN IN DE GAME.",
+  "GEBOREN OM TE FRAGGEN. GEDWONGEN OM TE WERKEN.",
+];
+
+const montageEl = $("montage");
+const imgA = $("montage-img-a");
+const imgB = $("montage-img-b");
+let montageIdx = 0;
+let montageTimer = null;
+let montageClockTimer = null;
+let activeImg = null; // wisselt tussen imgA en imgB voor de crossfade
+
+function montagePhotos() {
+  return typeof PHOTOS !== "undefined" && PHOTOS.length ? PHOTOS : null;
+}
+
+function showMontageSlide(idx) {
+  const photos = montagePhotos();
+  if (!photos) return;
+  montageIdx = ((idx % photos.length) + photos.length) % photos.length;
+
+  const incoming = activeImg === imgA ? imgB : imgA;
+  const outgoing = activeImg;
+  activeImg = incoming;
+
+  incoming.src = photos[montageIdx];
+  incoming.classList.remove("kenburns-a", "kenburns-b", "visible");
+  void incoming.offsetWidth; // herstart de ken burns animatie
+  incoming.classList.add(montageIdx % 2 ? "kenburns-b" : "kenburns-a", "visible");
+  if (outgoing) outgoing.classList.remove("visible");
+
+  $("montage-caption").textContent = rand(MONTAGE_CAPTIONS);
+}
+
+function updateVhsClock() {
+  const now = new Date();
+  // het jaar is uiteraard 1987. de rest van de klok loopt gewoon echt.
+  $("vhs-timestamp").textContent =
+    `28.12.1987 ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+}
+
+function startMontage(startIdx = 0) {
+  montageEl.classList.remove("hidden");
+  activeImg = null;
+  showMontageSlide(startIdx);
+  montageTimer = setInterval(() => showMontageSlide(montageIdx + 1), 4600);
+  updateVhsClock();
+  montageClockTimer = setInterval(updateVhsClock, 1000);
+  startSynthwave();
+}
+
+function stopMontage() {
+  montageEl.classList.add("hidden");
+  clearInterval(montageTimer);
+  clearInterval(montageClockTimer);
+  stopSynthwave();
+}
+
+$("btn-montage").addEventListener("click", () => {
+  if (!montagePhotos()) {
+    $("btn-montage").innerHTML = "🌴 GEEN FOTO'S = GEEN MONTAGE 🌴<br><small>(de placeholders verdienen dit niet)</small>";
+    return;
+  }
+  startMontage(0);
+});
+$("montage-close").addEventListener("click", stopMontage);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !montageEl.classList.contains("hidden")) stopMontage();
+});
+
+// ---------------------------------------------------------------- synthwave soundtrack
+// Een klein sequencertje: kick, snare (ruis), hihat, sawtooth-bas
+// en een zweverige pad. 100% WebAudio, 0% Spotify.
+let swTimer = null;
+let swMaster = null;
+let swStep = 0;
+
+const SW_TEMPO = 104;
+const SW_STEP_SEC = 60 / SW_TEMPO / 2; // achtste noten
+// A-mineur verdriet, zoals het hoort: Am - F - C - G (basnoten per maat)
+const SW_BASSLINE = [55.0, 55.0, 43.65, 43.65, 65.41, 65.41, 49.0, 49.0];
+
+function swKick(ac, t) {
+  const osc = ac.createOscillator();
+  const g = ac.createGain();
+  osc.frequency.setValueAtTime(140, t);
+  osc.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+  g.gain.setValueAtTime(0.5, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+  osc.connect(g).connect(swMaster);
+  osc.start(t); osc.stop(t + 0.25);
+}
+
+function swSnare(ac, t) {
+  const len = 0.18;
+  const buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+  const src = ac.createBufferSource();
+  src.buffer = buf;
+  const bp = ac.createBiquadFilter();
+  bp.type = "highpass"; bp.frequency.value = 1800;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0.32, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + len);
+  src.connect(bp).connect(g).connect(swMaster);
+  src.start(t);
+}
+
+function swHat(ac, t) {
+  const len = 0.05;
+  const buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  const src = ac.createBufferSource();
+  src.buffer = buf;
+  const hp = ac.createBiquadFilter();
+  hp.type = "highpass"; hp.frequency.value = 8000;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0.08, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + len);
+  src.connect(hp).connect(g).connect(swMaster);
+  src.start(t);
+}
+
+function swBass(ac, t, freq) {
+  const osc = ac.createOscillator();
+  osc.type = "sawtooth";
+  osc.frequency.value = freq;
+  const lp = ac.createBiquadFilter();
+  lp.type = "lowpass";
+  lp.frequency.setValueAtTime(900, t);
+  lp.frequency.exponentialRampToValueAtTime(200, t + SW_STEP_SEC);
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0.22, t);
+  g.gain.exponentialRampToValueAtTime(0.02, t + SW_STEP_SEC * 0.95);
+  osc.connect(lp).connect(g).connect(swMaster);
+  osc.start(t); osc.stop(t + SW_STEP_SEC);
+}
+
+function swPad(ac, t, root) {
+  // klein akkoordje (grondtoon + kwint + octaaf), heel zachtjes, heel 1987
+  [1, 1.5, 2].forEach((ratio) => {
+    const osc = ac.createOscillator();
+    osc.type = "triangle";
+    osc.frequency.value = root * 2 * ratio;
+    osc.detune.value = (Math.random() - 0.5) * 12;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.05, t + 0.4);
+    g.gain.linearRampToValueAtTime(0.0, t + SW_STEP_SEC * 4);
+    osc.connect(g).connect(swMaster);
+    osc.start(t); osc.stop(t + SW_STEP_SEC * 4);
+  });
+}
+
+function startSynthwave() {
+  const ac = ctx();
+  if (ac.state === "suspended") ac.resume();
+  swMaster = ac.createGain();
+  swMaster.gain.value = 0.9;
+  swMaster.connect(ac.destination);
+  swStep = 0;
+  let nextTime = ac.currentTime + 0.1;
+
+  swTimer = setInterval(() => {
+    // plan vooruit zolang we binnen 0.3s van de volgende stap zitten
+    while (nextTime < ac.currentTime + 0.3) {
+      const stepInBar = swStep % 8;
+      const bass = SW_BASSLINE[swStep % SW_BASSLINE.length];
+      if (stepInBar % 2 === 0) swKick(ac, nextTime);
+      if (stepInBar === 2 || stepInBar === 6) swSnare(ac, nextTime);
+      swHat(ac, nextTime + SW_STEP_SEC / 2);
+      swBass(ac, nextTime, bass);
+      if (stepInBar === 0) swPad(ac, nextTime, bass);
+      nextTime += SW_STEP_SEC;
+      swStep++;
+    }
+  }, 25);
+}
+
+function stopSynthwave() {
+  clearInterval(swTimer);
+  if (swMaster) {
+    const ac = ctx();
+    swMaster.gain.setTargetAtTime(0, ac.currentTime, 0.15);
+    const dying = swMaster;
+    setTimeout(() => dying.disconnect(), 800);
+    swMaster = null;
+  }
+}
 
 // ---------------------------------------------------------------- popup "advertentie"
 // De sluitknop ontwijkt je cursor twee keer. Daarna mag het. Genade bestaat.
