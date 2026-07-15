@@ -1,0 +1,582 @@
+/* =============================================================
+   IS HET AL TIJD VOOR DE LAN?! — stylesheet
+   Doelbewust het allerslechtste UI-ontwerp van de Benelux.
+   Elke keuze hieronder is fout. Dat is de bedoeling.
+   ============================================================= */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+  color: #00ff00;
+  background: #ff00ff;
+  cursor: crosshair;
+  overflow-x: hidden;
+}
+
+/* Tegeltjes-achtergrond: knipperend schaakbord, zoals de natuur het bedoeld heeft */
+.tiled-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    repeating-conic-gradient(#ff00ff 0% 25%, #00ffff 0% 50%) 0 0 / 64px 64px;
+  animation: bg-pulse 1.2s steps(2) infinite;
+}
+@keyframes bg-pulse {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(90deg); }
+}
+
+/* <blink> is dood, lang leve blink */
+.blink { animation: blink 0.7s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.rainbow-text {
+  animation: rainbow 1s linear infinite;
+}
+@keyframes rainbow {
+  0%   { color: #ff0000; }
+  16%  { color: #ff9900; }
+  33%  { color: #ffff00; }
+  50%  { color: #00ff00; }
+  66%  { color: #0099ff; }
+  83%  { color: #9900ff; }
+  100% { color: #ff0000; }
+}
+
+/* ------------- marquees ------------- */
+.marquee-top {
+  background: #ff0000;
+  color: #ffff00;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 6px 0;
+  border-bottom: 5px ridge #00ff00;
+  text-shadow: 2px 2px 0 #0000ff;
+}
+.marquee-mid {
+  background: #0000cc;
+  color: #00ff00;
+  font-size: 18px;
+  border: 4px dashed #ffff00;
+  margin: 10px 0;
+  padding: 4px 0;
+}
+
+/* ------------- de heilige tabel-layout ------------- */
+.layout-table {
+  border-color: #00ff00;
+  border-style: ridge;
+  background: rgba(0, 0, 128, 0.85);
+  margin-top: 12px;
+  margin-bottom: 30px;
+}
+.layout-table td {
+  border: 4px outset #c0c0c0;
+}
+
+.cell-header {
+  background: repeating-linear-gradient(45deg, #000080, #000080 20px, #4b0082 20px, #4b0082 40px);
+  text-align: center;
+  padding: 14px;
+}
+
+.construction {
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+  background: repeating-linear-gradient(45deg, #ffcc00, #ffcc00 24px, #111 24px, #111 48px);
+  padding: 8px;
+  border: 4px double #ff0000;
+  transform: rotate(-1.5deg);
+  margin-bottom: 12px;
+}
+
+/* WordArt is nooit weggeweest */
+.wordart {
+  font-size: clamp(36px, 8vw, 84px);
+  margin: 10px 0;
+  line-height: 1.05;
+  background: linear-gradient(#ff0000, #ffff00, #00ff00, #00ffff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #ffffff;
+  text-shadow: 6px 6px 0 rgba(0,0,0,0.6);
+  transform: perspective(300px) rotateX(14deg) skewX(-4deg);
+  animation: wobble 2.2s ease-in-out infinite;
+}
+@keyframes wobble {
+  0%, 100% { transform: perspective(300px) rotateX(14deg) skewX(-4deg) scale(1); }
+  50%      { transform: perspective(300px) rotateX(14deg) skewX(4deg) scale(1.05); }
+}
+
+.the-answer {
+  font-size: clamp(70px, 16vw, 180px);
+  font-weight: bold;
+  color: #ff0000;
+  text-shadow: 4px 4px 0 #ffff00, 8px 8px 0 #0000ff;
+  margin: 6px 0 0;
+}
+.answer-sub {
+  color: #ffff00;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.best-viewed {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #00ffff;
+  border: 2px dotted #00ffff;
+  display: inline-block;
+  padding: 4px 10px;
+  background: #000;
+}
+
+/* ------------- navigatie kolom ------------- */
+.cell-nav {
+  background: #008080;
+  padding: 10px;
+  text-align: center;
+}
+.nav-title {
+  font-size: 22px;
+  color: #ffff00;
+  text-decoration: underline wavy #ff0000;
+  margin-bottom: 8px;
+}
+.nav-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+.nav-list li {
+  margin: 8px 0;
+  border-bottom: 1px dashed #ffff00;
+}
+.dead-link {
+  color: #00ffff;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.dead-link:hover {
+  color: #ff00ff;
+  background: #ffff00;
+  cursor: not-allowed;
+}
+.dead-link:visited { color: #9900ff; }
+
+.counter-box {
+  margin: 14px auto;
+  background: #000;
+  border: 3px inset #808080;
+  padding: 8px;
+}
+.counter-label { color: #ff0000; font-size: 12px; font-weight: bold; }
+.counter {
+  font-family: "Courier New", monospace;
+  font-size: 26px;
+  letter-spacing: 4px;
+  color: #00ff00;
+  background: #001100;
+  border: 2px inset #444;
+  margin: 4px 0;
+}
+.counter-note { color: #888; font-size: 10px; font-style: italic; }
+
+.webring {
+  margin: 12px 0;
+  padding: 6px;
+  border: 2px groove #ff00ff;
+  background: #4b0082;
+  font-size: 13px;
+  color: #00ff00;
+}
+
+.badge {
+  display: inline-block;
+  margin: 6px 2px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 3px outset #c0c0c0;
+  transform: rotate(-6deg);
+}
+.badge-1 { background: #ff0000; color: #fff; }
+.badge-2 { background: #ffff00; color: #000; transform: rotate(5deg); }
+
+/* ------------- hoofdinhoud ------------- */
+.cell-main {
+  padding: 12px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.25) 0 2px, transparent 2px 4px),
+    #000060;
+}
+
+.content-box {
+  border: 5px ridge #c0c0c0;
+  margin: 0 0 18px;
+  padding: 12px;
+  text-align: center;
+}
+.box-countdown { background: #400040; transform: rotate(0.6deg); }
+.box-stats     { background: #003300; transform: rotate(-0.8deg); }
+.box-hype      { background: #660000; transform: rotate(0.9deg); }
+.box-wisdom    { background: #333300; transform: rotate(-0.5deg); }
+.box-photos    { background: #002b40; transform: rotate(0.7deg); }
+.box-signup    { background: #1a0033; transform: rotate(0.8deg); }
+.box-sponsors  { background: #3d1a00; transform: rotate(-0.6deg); }
+
+.section-title {
+  font-size: 24px;
+  margin: 0 0 10px;
+  color: #ffff00;
+  text-decoration: underline overline wavy;
+}
+
+/* ------------- countdown ------------- */
+.countdown {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.time-block {
+  background: #000;
+  border: 4px inset #00ff00;
+  padding: 10px 14px;
+  min-width: 90px;
+}
+.time-value {
+  font-family: "Courier New", monospace;
+  font-size: clamp(34px, 6vw, 56px);
+  font-weight: bold;
+  color: #ff0000;
+  text-shadow: 0 0 8px #ff0000, 3px 3px 0 #ffff00;
+}
+.time-label {
+  color: #00ffff;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.countdown-date {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ff9900;
+}
+
+/* ------------- statistieken ------------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  text-align: left;
+}
+.stat {
+  background: #000;
+  border: 3px dotted #ff00ff;
+  padding: 8px;
+  font-size: 15px;
+}
+.stat b { color: #ffff00; font-size: 20px; }
+.stat:nth-child(odd) { transform: rotate(1deg); }
+.stat:nth-child(even) { transform: rotate(-1.2deg); }
+
+.fine-print {
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+}
+
+/* ------------- hype meter ------------- */
+.hype-meter {
+  height: 40px;
+  background: #000;
+  border: 4px inset #808080;
+  margin: 8px auto;
+  max-width: 500px;
+  position: relative;
+}
+.hype-bar {
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(45deg, #ff0000, #ff0000 12px, #ffff00 12px, #ffff00 24px);
+  transition: width 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #000;
+  font-weight: bold;
+  min-width: 40px;
+}
+.hype-status { font-size: 16px; color: #00ffff; }
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: 5px outset #c0c0c0;
+  background: linear-gradient(#00ff00, #006600);
+  color: #000;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 #fff;
+}
+.btn:hover { filter: invert(1); }
+.btn:active { border-style: inset; transform: translateY(2px); }
+.btn-horn { background: linear-gradient(#ff0000, #660000); color: #ffff00; }
+.btn-epic { background: linear-gradient(#ff00ff, #4b0082); color: #00ff00; animation: rainbow 1s linear infinite; }
+.btn-small { font-size: 14px; }
+
+/* ------------- wijsheden ------------- */
+.wisdom {
+  font-size: 20px;
+  font-style: italic;
+  color: #00ff99;
+  margin: 8px 0 12px;
+  text-shadow: 2px 2px 0 #000;
+}
+
+/* ------------- foto's ------------- */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.photo-grid img,
+.photo-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 6px ridge #ff00ff;
+  background: #000;
+}
+.photo-grid img:nth-child(odd) { transform: rotate(2deg); }
+.photo-grid img:nth-child(even) { transform: rotate(-2.4deg); }
+.photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #ffff00;
+  font-size: 13px;
+  text-align: center;
+  padding: 6px;
+}
+.photo-placeholder .big { font-size: 40px; }
+
+/* ------------- sponsors ------------- */
+.sponsors {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  font-size: 16px;
+}
+.sponsors li {
+  margin: 8px 0;
+  padding: 6px;
+  background: rgba(0,0,0,0.4);
+  border-left: 8px solid #ffff00;
+}
+
+/* ------------- aanmeldformulier (veel succes) ------------- */
+#signup-form { text-align: left; }
+.form-row { margin: 16px 0; }
+.form-row label { display: block; color: #00ffff; font-size: 16px; margin-bottom: 6px; }
+
+.name-builder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.name-preview {
+  font-family: "Courier New", monospace;
+  font-size: 24px;
+  color: #00ff00;
+  background: #000;
+  border: 3px inset #808080;
+  padding: 4px 12px;
+  min-width: 120px;
+  letter-spacing: 3px;
+}
+#letter-picker {
+  font-family: inherit;
+  font-size: 16px;
+  background: #ffff00;
+  border: 3px inset #ff00ff;
+  padding: 4px;
+}
+
+#pizza-slider {
+  width: 100%;
+  accent-color: #ff0000;
+  /* omgekeerd, want waarom niet */
+  direction: rtl;
+}
+.pizza-readout { color: #ffff00; font-size: 18px; }
+
+.checkbox-label { cursor: pointer; }
+.checkbox-label input { transform: scale(1.8); margin-right: 10px; accent-color: #ff00ff; }
+
+.text-input {
+  font-family: inherit;
+  font-size: 16px;
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  background: #000;
+  color: #00ff00;
+  border: 3px inset #808080;
+  /* tekst zachtjes ondersteboven bij focus zou té wreed zijn. dit is genoeg: */
+  text-align: right;
+}
+
+.submit-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: relative;
+  min-height: 60px;
+}
+.btn-submit { background: linear-gradient(#999, #444); color: #ccc; } /* saai = verdacht */
+.btn-cancel {
+  background: linear-gradient(#00ff00, #009900);
+  color: #000;
+  font-size: 24px;
+  padding: 12px 28px;
+  animation: rainbow 1s linear infinite;
+} /* de gevaarlijke knop is uiteraard de mooiste */
+
+.signup-result {
+  margin-top: 12px;
+  font-size: 18px;
+  color: #ff9900;
+  min-height: 24px;
+}
+
+/* ------------- cookie banner ------------- */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #4b0082;
+  border-top: 6px ridge #ffff00;
+  color: #00ff00;
+  text-align: center;
+  padding: 12px;
+  z-index: 1500;
+  font-size: 16px;
+}
+.cookie-banner p { margin: 4px 0; }
+.cookie-banner.flipped { transform: rotate(180deg); }
+
+/* ------------- footer ------------- */
+.cell-footer {
+  background: #300030;
+  text-align: center;
+  color: #00ffff;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* ------------- popup "advertentie" ------------- */
+.popup-ad {
+  position: fixed;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: min(360px, 90vw);
+  background: #c0c0c0;
+  border: 4px outset #fff;
+  box-shadow: 10px 10px 0 rgba(0,0,0,0.6);
+  z-index: 1000;
+  color: #000;
+}
+.popup-titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 4px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.popup-close {
+  background: #c0c0c0;
+  border: 2px outset #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+.popup-body { padding: 12px; text-align: center; font-size: 15px; }
+
+/* ------------- JA overlay ------------- */
+.lan-time-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  text-align: center;
+}
+.ja-text {
+  font-size: clamp(100px, 25vw, 320px);
+  font-weight: bold;
+  animation: rainbow 0.4s linear infinite, wobble 0.8s ease-in-out infinite;
+  text-shadow: 8px 8px 0 rgba(255,255,255,0.3);
+}
+.ja-sub { font-size: 24px; color: #ffff00; }
+
+.hidden { display: none !important; }
+
+/* ------------- cursor trail ------------- */
+.trail-particle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 18px;
+  z-index: 999;
+  animation: trail-fade 0.9s forwards;
+}
+@keyframes trail-fade {
+  to { opacity: 0; transform: translateY(26px) rotate(180deg) scale(0.3); }
+}
+
+/* ------------- EPISCHE MODUS: alles nog erger ------------- */
+body.epic-mode { animation: epic-spin 9s linear infinite; }
+@keyframes epic-spin {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+body.epic-mode .content-box { animation: shake 0.25s linear infinite; }
+body.epic-mode .wordart { animation: wobble 0.4s ease-in-out infinite; }
+@keyframes shake {
+  0%   { transform: translate(1px, 1px) rotate(0.5deg); }
+  25%  { transform: translate(-1px, 2px) rotate(-0.7deg); }
+  50%  { transform: translate(2px, -1px) rotate(0.9deg); }
+  75%  { transform: translate(-2px, -2px) rotate(-0.5deg); }
+  100% { transform: translate(1px, 1px) rotate(0.5deg); }
+}
+
+/* mobiel: de tabel-layout capituleert */
+@media (max-width: 760px) {
+  .layout-table, .layout-table tr, .layout-table td {
+    display: block;
+    width: 100% !important;
+  }
+}
